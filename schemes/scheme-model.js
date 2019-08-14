@@ -1,40 +1,43 @@
 const db = require('../data/db-config.js');
 
 module.exports = {
-    getUsers,
+    getSchemes,
     getById,
     add,
-    getUserPosts,
+    getSchemeSteps,
     update,
     remove,
 };
 
-function getUsers() {
-    return db('users');
+function getSchemes() {
+    return db('schemes');
 }
 function getById(id) {
-    return db('users').where({ id });
+    return db('schemes').where({ id });
 }
 
-function add(user) {
-    return db('users').insert(user);
+function add(scheme) {
+    return db('schemes').insert(scheme);
 }
 
-function getUserPosts(id) {
-    return db('posts as p')
-        .innerJoin('users as u', 'p.user_id', '=', 'u.id')
-        .select('p.id', 'p.contents', 'u.username as postedBy')
-        .where({ user_id: id });
+function getSchemeSteps(id) {
+    return db('steps)
+        .innerJoin('schemes', 'steps.scheme_id', '=', 'schemes.id')
+        .select('steps.id',
+            'schemes.scheme_name',
+            'steps.step_number',
+            'steps.instructions')
+        .where({ scheme_id: id });
 }
 
 function update(id, changes) {
-    return db('users')
+    return db('schemes')
         .where({ id })
         .update(changes);
 }
 
 function remove(id) {
-    return db('users')
+    return db('schemes')
         .where({ id })
         .del();
 }
